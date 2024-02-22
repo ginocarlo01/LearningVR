@@ -14,6 +14,8 @@ public class FireBulletOnValidate : MonoBehaviour
     [SerializeField]
     float bulletSpeed = 20;
 
+    public Type fireType;
+
     private void Start()
     {
         XRGrabInteractable grabbable = GetComponent<XRGrabInteractable>();
@@ -25,6 +27,22 @@ public class FireBulletOnValidate : MonoBehaviour
         GameObject spawnedBullet = Instantiate(bullet);
         spawnedBullet.transform.position = spawnPoint.position;
         spawnedBullet.GetComponent<Rigidbody>().velocity = spawnPoint.forward * bulletSpeed;
+        spawnedBullet.GetComponent<BulletType>().type = fireType;
         Destroy(spawnedBullet, 5);
+    }
+
+    private void OnEnable()
+    {
+        ChangeMO.changedMOAction += ChangeFireType;
+    }
+
+    private void OnDisable()
+    {
+        ChangeMO.changedMOAction -= ChangeFireType;
+    }
+
+    public void ChangeFireType(Type newType)
+    {
+        fireType = newType;
     }
 }
